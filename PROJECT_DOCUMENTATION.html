@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Echo - Mini Project Documentation | Ravi Kumawat</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 22mm 18mm 22mm 18mm;
+      @bottom-left {
+        content: "Project Echo (Echovoice)";
+        font-size: 9pt;
+        color: #666;
+      }
+      @bottom-right {
+        content: "Ravi Kumawat | EN24CS3010841";
+        font-size: 9pt;
+        font-weight: bold;
+        color: #333;
+      }
+      @bottom-center {
+        content: counter(page);
+        font-size: 9pt;
+        color: #666;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    .cover {
+      text-align: center;
+      padding: 40px 0 30px 0;
+      border-bottom: 2px solid #e5e7eb;
+      margin-bottom: 30px;
+    }
+
+    .cover h1 {
+      font-size: 26pt;
+      margin: 0 0 10px 0;
+      color: #111827;
+      letter-spacing: -0.5px;
+    }
+
+    .cover h2 {
+      font-size: 14pt;
+      font-weight: 500;
+      color: #4b5563;
+      margin: 0 0 25px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 10pt;
+      font-weight: 600;
+      margin-bottom: 25px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .student-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 24px;
+      display: inline-block;
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .student-card table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .student-card td {
+      padding: 4px 12px;
+      font-size: 10.5pt;
+    }
+
+    .student-card td.label {
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .student-card td.value {
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    h2.section-title {
+      font-size: 15pt;
+      color: #0f172a;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 6px;
+      margin-top: 32px;
+      margin-bottom: 14px;
+    }
+
+    h3 {
+      font-size: 12pt;
+      color: #1e293b;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    p, li {
+      font-size: 10.5pt;
+      color: #334155;
+      text-align: justify;
+    }
+
+    ul, ol {
+      padding-left: 22px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 10pt;
+    }
+
+    table.data-table th, table.data-table td {
+      border: 1px solid #cbd5e1;
+      padding: 9px 12px;
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    table.data-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .code-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+      font-size: 9pt;
+      overflow-x: auto;
+      margin: 14px 0;
+    }
+
+    .footer-bar {
+      margin-top: 50px;
+      padding-top: 14px;
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5pt;
+      color: #64748b;
+    }
+
+    .footer-bar .student-highlight {
+      font-weight: bold;
+      color: #0f172a;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .no-print {
+        display: none;
+      }
+      .running-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        border-top: 1px solid #ccc;
+        padding: 6px 0;
+        font-size: 9pt;
+        color: #444;
+        background: white;
+      }
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+    .print-btn:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+  <div class="container">
+    
+    <div class="cover">
+      <div class="badge">College Mini Project Documentation</div>
+      <h1>Project Echo (Echovoice)</h1>
+      <h2>A Multimodal Live Conversation Assistant for People with Speech Impairments</h2>
+      
+      <div class="student-card">
+        <table>
+          <tr>
+            <td class="label">Candidate Name:</td>
+            <td class="value">Ravi Kumawat</td>
+          </tr>
+          <tr>
+            <td class="label">Enrollment Number:</td>
+            <td class="value">EN24CS3010841</td>
+          </tr>
+          <tr>
+            <td class="label">Department:</td>
+            <td>Computer Science & Engineering</td>
+          </tr>
+          <tr>
+            <td class="label">Live Web Application:</td>
+            <td><a href="https://ide-quicklink-6-five.vercel.app" target="_blank">https://ide-quicklink-6-five.vercel.app</a></td>
+          </tr>
+          <tr>
+            <td class="label">Source Code:</td>
+            <td><a href="https://github.com/kumawatravi456-crypto/Echovoice1" target="_blank">github.com/kumawatravi456-crypto/Echovoice1</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <h2 class="section-title">1. Abstract</h2>
+    <p>
+      Individuals suffering from speech and motor disabilities—such as Amyotrophic Lateral Sclerosis (ALS), cerebral palsy, Parkinson's disease, or stroke-induced dysarthria—often face immense barriers communicating with traditional voice-recognition assistants. <strong>Project Echo</strong> introduces an end-to-end multimodal conversation assistant that bridges non-verbal intent and live spoken dialogue.
+    </p>
+    <p>
+      By synchronously capturing (1) real-time speech via Web Speech recognition, (2) on-device hand gesture tracking via Google MediaPipe, and (3) facial mouth-motion metrics, the system derives user intent locally. A secure FastAPI backend feeds these signals into a conversational Large Language Model (LLM) to suggest context-aware responses. Crucially, a human-in-the-loop review safeguard guarantees that no artificial message is vocalized until explicitly confirmed by the user.
+    </p>
+
+    <h2 class="section-title">2. Problem Statement & Need</h2>
+    <ul>
+      <li><strong>Failure of Standard ASR:</strong> Mainstream speech recognition systems rely on acoustic models trained exclusively on neurotypical voices and completely misinterpret atypical speech.</li>
+      <li><strong>Sluggish Traditional AAC Devices:</strong> Conventional Augmentative and Alternative Communication devices require tedious letter-by-letter or symbol-by-symbol selection, causing average communication rates below 10 words per minute.</li>
+      <li><strong>Privacy Concerns:</strong> Transmitting continuous ambient webcam video to remote cloud servers creates severe privacy and ethical issues for users and their families.</li>
+    </ul>
+
+    <h2 class="section-title">3. System Architecture</h2>
+    <p>
+      The architecture follows an edge-first pattern to preserve bandwidth and privacy:
+    </p>
+    <ol>
+      <li><strong>Client Vision Tracking:</strong> Runs `@mediapipe/tasks-vision` directly in the browser via Web Workers to identify 21 hand landmarks and 468 facial points without streaming raw video.</li>
+      <li><strong>Feature Compression:</strong> Calculates a 7-dimensional geometry vector (inter-finger Euclidean distances and palm orientations).</li>
+      <li><strong>Backend REST Inference:</strong> FastAPI consumes the 7-feature payload and evaluates it using a pre-trained scikit-learn classifier in under 10 milliseconds.</li>
+      <li><strong>Contextual AI Formulation:</strong> Groq LLM evaluates dialogue history and the latest verified gesture to draft concise responses.</li>
+      <li><strong>Confirmation & Audio Output:</strong> Upon explicit user tap, the confirmed phrase is vocalized via browser speech synthesis or ElevenLabs audio output.</li>
+    </ol>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">4. Technology Stack</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Role in Project</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Frontend</strong></td>
+          <td>React 19, TypeScript, Vite 8.3</td>
+          <td>High-performance single-page web interface with real-time state management.</td>
+        </tr>
+        <tr>
+          <td><strong>UI & Styling</strong></td>
+          <td>Tailwind CSS, Glassmorphic UI</td>
+          <td>Accessible, high-contrast, modern responsive design layout.</td>
+        </tr>
+        <tr>
+          <td><strong>Edge Vision</strong></td>
+          <td>Google MediaPipe Tasks Vision</td>
+          <td>Local 30 FPS client-side hand joint tracking and lip geometry calculation.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend API</strong></td>
+          <td>FastAPI 0.162, Uvicorn, Pydantic</td>
+          <td>Asynchronous REST backend handling ML inference and conversation routing.</td>
+        </tr>
+        <tr>
+          <td><strong>Machine Learning</strong></td>
+          <td>scikit-learn, NumPy, Joblib</td>
+          <td>StandardScaler and Logistic Regression pipeline for gesture classification.</td>
+        </tr>
+        <tr>
+          <td><strong>Speech Engine</strong></td>
+          <td>Web Speech API / ElevenLabs Scribe</td>
+          <td>Dual-mode speech recognition (instant local browser engine + cloud ASR).</td>
+        </tr>
+        <tr>
+          <td><strong>Cloud Deployment</strong></td>
+          <td>Vercel Serverless Platform</td>
+          <td>Global low-latency hosting of the client web application.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">5. Gesture Recognition Classes & Logic</h2>
+    <p>
+      The custom machine learning classifier targets five essential functional gestures:
+    </p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Gesture Label</th>
+          <th>Physical Expression</th>
+          <th>System Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>YES</strong></td>
+          <td>Closed fist with upright thumb extended upward</td>
+          <td>Affirmative agreement / approval</td>
+        </tr>
+        <tr>
+          <td><strong>NO</strong></td>
+          <td>Index finger raised and waved side-to-side</td>
+          <td>Decline / negative response</td>
+        </tr>
+        <tr>
+          <td><strong>HELP</strong></td>
+          <td>Flat open palm held vertically in front of body</td>
+          <td>Urgent assistance requested</td>
+        </tr>
+        <tr>
+          <td><strong>WATER</strong></td>
+          <td>Three central fingers raised in 'W' formation</td>
+          <td>Hydration / physical comfort request</td>
+        </tr>
+        <tr>
+          <td><strong>STOP</strong></td>
+          <td>Open palm pushed outward toward camera</td>
+          <td>Cease current activity or conversation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">6. Experimental Evaluation</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Evaluation Metric</th>
+          <th>Observed Score</th>
+          <th>Significance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cross-Validation Accuracy</strong></td>
+          <td><strong>88.89%</strong></td>
+          <td>Tested across 27 recorded gesture sequences</td>
+        </tr>
+        <tr>
+          <td><strong>Balanced Accuracy</strong></td>
+          <td><strong>91.43%</strong></td>
+          <td>Ensures equal performance across all 5 classes</td>
+        </tr>
+        <tr>
+          <td><strong>Macro F1-Score</strong></td>
+          <td><strong>89.39%</strong></td>
+          <td>High precision and recall balance</td>
+        </tr>
+        <tr>
+          <td><strong>Model Inference Latency</strong></td>
+          <td><strong>&lt; 8 ms</strong></td>
+          <td>Instant classification on FastAPI backend</td>
+        </tr>
+        <tr>
+          <td><strong>End-to-End Latency</strong></td>
+          <td><strong>&lt; 45 ms</strong></td>
+          <td>Real-time feedback loop from camera frame to UI</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title">7. Conclusion & Future Scope</h2>
+    <p>
+      <strong>Conclusion:</strong> Project Echo proves that fusing browser-level computer vision with lightweight machine learning pipelines creates a practical, privacy-respecting communication bridge for people with speech impairments. The application achieves responsive real-time inference without cloud video streaming.
+    </p>
+    <p>
+      <strong>Future Scope:</strong>
+    </p>
+    <ul>
+      <li>Expanding gesture vocabulary to full Indian Sign Language (ISL) alphabets and numbers.</li>
+      <li>Integrating offline WebAssembly ONNX runtimes for completely serverless local inference.</li>
+      <li>Refining visual lip-reading models to support silent speech decoding.</li>
+    </ul>
+
+    <div class="footer-bar">
+      <span>Project Echo (Echovoice) Documentation</span>
+      <span><strong>Student:</strong> <span class="student-highlight">Ravi Kumawat</span></span>
+      <span><strong>Enrollment No.:</strong> <span class="student-highlight">EN24CS3010841</span></span>
+    </div>
+
+  </div>
+
+  <div class="running-footer no-print">
+    Project Echo | Student: Ravi Kumawat (Enrollment No: EN24CS3010841)
+  </div>
+
+</body>
+</html>
