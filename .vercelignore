@@ -1,0 +1,15 @@
+.venv
+.venv311
+backend/.venv
+*.zip
+datasets/public
+datasets/custom
+work
+outputs
+tests
+backend/tests
+.pytest_cache
+docs
+*.pyc
+__pycache__
+.DS_Store

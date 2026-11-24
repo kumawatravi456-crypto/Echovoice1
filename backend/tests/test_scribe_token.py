@@ -231,3 +231,47 @@ def test_scribe_token_route_sanitizes_provider_failure() -> None:
         "message": "Live transcription is temporarily unavailable.",
     }
     assert "private provider" not in response.text
+
+
+def test_scribe_token_route_explains_missing_speech_to_text_permission() -> None:
+    application = make_app()
+
+    class FailedTokenService:
+        async def create_token(self) -> str:
+            raise ScribeProviderError(
+                "ElevenLabs could not issue a Scribe token",
+                status_code=401,
+                provider_code="missing_permissions",
+            )
+
+    application.state.scribe_token_service = FailedTokenService()
+    with TestClient(application) as client:
+        response = client.get(
+            "/api/v1/transcription/scribe-token",
+            headers={"Origin": "http://localhost:3001"},
+        )
+
+    assert response.status_code == 503
+    assert response.json()["detail"] == {
+        "code": "scribe_missing_permissions",
+        "message": "The ElevenLabs API key needs the speech_to_text permission. Update its permissions, then restart the backend.",
+    }
+
+
+def test_scribe_token_route_reports_safe_provider_timeout() -> None:
+    application = make_app()
+
+    class FailedTokenService:
+        async def create_token(self) -> str:
+            raise ScribeProviderError("private timeout detail", failure_kind="timeout")
+
+    application.state.scribe_token_service = FailedTokenService()
+    with TestClient(application) as client:
+        response = client.get(
+            "/api/v1/transcription/scribe-token",
+            headers={"Origin": "http://localhost:3001"},
+        )
+
+    assert response.status_code == 503
+    assert response.json()["detail"]["code"] == "scribe_provider_timeout"
+    assert "private timeout detail" not in response.text

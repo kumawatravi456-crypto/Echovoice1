@@ -44,3 +44,4 @@ datasets/**/*
 .venv/
 .venv311/
 venv/
+.vercel

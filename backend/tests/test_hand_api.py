@@ -79,3 +79,20 @@ def test_missing_model_is_reported_and_prediction_returns_503(tmp_path: Path) ->
         assert status["models"]["hand_classifier"]["status"] == "unavailable"
         response = test_client.post("/api/v1/inference/hand/features", json={"features": SAMPLE_FEATURES})
         assert response.status_code == 503
+
+
+def test_unexpected_prediction_failure_is_reported_as_cors_readable_500(client: TestClient) -> None:
+    class BrokenClassifier:
+        def predict(self, _features):
+            raise AttributeError("private runtime traceback detail")
+
+    client.app.state.hand_classifier = BrokenClassifier()
+    response = client.post(
+        "/api/v1/inference/hand/features",
+        json={"features": SAMPLE_FEATURES},
+        headers={"Origin": "http://localhost:3001"},
+    )
+    assert response.status_code == 500
+    assert response.headers["access-control-allow-origin"] == "http://localhost:3001"
+    assert response.json()["detail"]["code"] == "hand_inference_error"
+    assert "private runtime traceback detail" not in response.text

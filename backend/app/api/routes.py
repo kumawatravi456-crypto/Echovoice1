@@ -95,9 +95,49 @@ async def create_scribe_token(request: Request, response: Response) -> ScribeTok
         ) from error
     except ScribeProviderError as error:
         logger.warning("Scribe token request failed (%s)", type(error.__cause__).__name__ if error.__cause__ else "provider")
+        if error.provider_code == "missing_permissions":
+            detail = {
+                "code": "scribe_missing_permissions",
+                "message": "The ElevenLabs API key needs the speech_to_text permission. Update its permissions, then restart the backend.",
+            }
+        elif error.status_code == 401:
+            detail = {
+                "code": "scribe_auth_failed",
+                "message": "ElevenLabs rejected the API key. Check that the configured key is active and has Scribe access.",
+            }
+        elif error.status_code == 403:
+            detail = {
+                "code": "scribe_access_denied",
+                "message": "The ElevenLabs account or API key is not permitted to create Scribe sessions.",
+            }
+        elif error.status_code == 429:
+            detail = {
+                "code": "scribe_rate_limited",
+                "message": "ElevenLabs is rate limiting Scribe token requests. Wait briefly, then retry.",
+            }
+        elif error.failure_kind == "timeout":
+            detail = {
+                "code": "scribe_provider_timeout",
+                "message": "ElevenLabs did not respond in time. Check the connection and retry.",
+            }
+        elif error.failure_kind == "network":
+            detail = {
+                "code": "scribe_provider_unreachable",
+                "message": "The backend could not reach ElevenLabs. Check the backend network connection and retry.",
+            }
+        elif error.failure_kind == "invalid_response":
+            detail = {
+                "code": "scribe_invalid_provider_response",
+                "message": "ElevenLabs returned an invalid Scribe token response. Retry later.",
+            }
+        else:
+            detail = {
+                "code": "scribe_unavailable",
+                "message": "Live transcription is temporarily unavailable.",
+            }
         raise HTTPException(
             status_code=503,
-            detail={"code": "scribe_unavailable", "message": "Live transcription is temporarily unavailable."},
+            detail=detail,
         ) from error
     response.headers["Cache-Control"] = "no-store"
     return ScribeTokenResponse(token=token)
@@ -113,6 +153,15 @@ def predict_hand_features(body: HandFeaturesRequest, request: Request) -> dict[s
     except ModelArtifactError as error:
         logger.exception("Hand classifier prediction failed")
         raise HTTPException(status_code=503, detail="Hand classifier could not produce a prediction.") from error
+    except Exception as error:
+        logger.exception("Unexpected hand inference failure")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "code": "hand_inference_error",
+                "message": "Hand inference failed on the backend. Check the backend log for details.",
+            },
+        ) from error
 
 
 @router.post("/api/v1/conversation/generate", response_model=ConversationGenerateResponse)
